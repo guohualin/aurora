@@ -1,5 +1,6 @@
 package com.aurora.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,10 +11,14 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Properties;
 
-
+@Data
 @Configuration
-//@ConfigurationProperties(prefix = "spring.mail")
+@ConfigurationProperties(prefix = "spring.mail")
 public class MailConfig {
+
+    String host;
+    String username;
+    String password;
 
     //bean命名
     @Bean(name = "javaMailSender")
@@ -21,13 +26,13 @@ public class MailConfig {
         //创建一个 JavaMailSenderImpl 的实例，用于发送邮件。
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         //设置邮件服务器的主机地址为 smtp.qq.com。这里假设您使用的是腾讯 QQ 邮箱服务。
-        mailSender.setHost("smtp.qq.com");
+        mailSender.setHost(host);
         //设置邮件服务器的端口号为 465。
         mailSender.setPort(465);
         ///设置发件人的邮箱地址，即您 QQ 邮箱的地址。
-        mailSender.setUsername("your_username@qq.com");
+        mailSender.setUsername(username);
         //设置发件人的邮箱密码，即您 QQ 邮箱的登录密码。注意要妥善保护您的密码，不要将其泄露给他人。
-        mailSender.setPassword("your_password");
+        mailSender.setPassword(password);
         //创建一个名为 props 的 Properties 对象，用于保存邮件发送的相关配置信息。
         Properties props = mailSender.getJavaMailProperties();
         //将邮件的传输协议设置为 SMTPS（即带有 SSL 加密的 SMTP 协议）。
