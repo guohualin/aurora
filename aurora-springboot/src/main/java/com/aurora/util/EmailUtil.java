@@ -1,6 +1,8 @@
 package com.aurora.util;
 
 import com.aurora.model.dto.EmailDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,6 +16,7 @@ import javax.mail.internet.MimeMessage;
 
 @Component
 public class EmailUtil {
+    private static Logger logger = LoggerFactory.getLogger(EmailUtil.class);
 
     @Value("${spring.mail.username}")
     private String email;
@@ -36,8 +39,10 @@ public class EmailUtil {
             mimeMessageHelper.setSubject(emailDTO.getSubject());
             mimeMessageHelper.setText(process, true);
             javaMailSender.send(mimeMessage);
-        } catch (MessagingException e) {
-            e.printStackTrace();
+        } catch (MessagingException me) {
+            logger.error("根据邮箱发送验证码失败---运行时异常---",me);
+        }catch (Exception e) {
+            logger.error("根据邮箱发送验证码失败---",e);
         }
     }
 

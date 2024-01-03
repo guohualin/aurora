@@ -34,6 +34,17 @@
       <el-table-column prop="linkName" label="链接名" align="center" />
       <el-table-column prop="linkAddress" label="链接地址" align="center" />
       <el-table-column prop="linkIntro" label="链接介绍" align="center" />
+      <el-table-column prop="status" label="状态" width="80" align="center">
+        <template slot-scope="scope">
+          <el-switch
+              v-model="scope.row.status"
+              active-color="#F4F4F5"
+              inactive-color="#13ce66"
+              :active-value="1"
+              :inactive-value="0"
+              @change="changeStatusForFriends(scope.row)" />
+        </template>
+      </el-table-column>
       <el-table-column prop="createTime" label="创建时间" width="140" align="center">
         <template slot-scope="scope">
           <i class="el-icon-time" style="margin-right: 5px" />
@@ -221,7 +232,28 @@ export default {
           this.count = data.data.count
           this.loading = false
         })
-    }
+    },
+    changeStatusForFriends(article) {
+      this.axios
+          .post('/api/admin/updateLinksStatus', {
+            id: article.id,
+            status: article.status
+          })
+          .then(({ data }) => {
+            if (data.flag) {
+              this.$notify.success({
+                title: '成功',
+                message: '修改成功'
+              })
+            } else {
+              this.$notify.error({
+                title: '失败',
+                message: data.message
+              })
+            }
+            this.remove = false
+          })
+    },
   }
 }
 </script>

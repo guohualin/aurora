@@ -43,7 +43,8 @@ public class AuroraInfoController {
     @ApiOperation(value = "获取系统信息")
     @GetMapping("/")
     public ResultVO<AuroraHomeInfoDTO> getBlogHomeInfo() {
-        return ResultVO.ok(auroraInfoService.getAuroraHomeInfo());
+        AuroraHomeInfoDTO auroraHomeInfo = auroraInfoService.getAuroraHomeInfo();
+        return ResultVO.ok(auroraHomeInfo);
     }
 
     @ApiOperation(value = "获取系统后台信息")

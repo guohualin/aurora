@@ -1,7 +1,7 @@
 export default {
   qqLogin: {
-    QQ_APP_ID: '101999415',
-    QQ_REDIRECT_URI: 'https://www.linhaojun.top/oauth/login/qq'
+    QQ_APP_ID: '758014943',
+    QQ_REDIRECT_URI: 'https://60.205.204.59:8086/oauth/login/qq'
   },
   routes: [
     {
@@ -17,7 +17,7 @@ export default {
       name: 'Talks',
       path: '/talks',
       i18n: {
-        cn: '说说',
+        cn: '日常',
         en: 'talks'
       },
       children: []
@@ -35,7 +35,7 @@ export default {
       name: 'Archives',
       path: '/archives',
       i18n: {
-        cn: '归档',
+        cn: '时光轮',
         en: 'Archives'
       },
       children: []

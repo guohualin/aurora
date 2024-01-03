@@ -58,6 +58,10 @@
           </DropdownMenu>
         </Dropdown>
       </li>
+<!--      <li>
+        &lt;!&ndash;  显示天气      &ndash;&gt;
+        <weather/>
+      </li>-->
     </ul>
   </nav>
 </template>
@@ -71,10 +75,11 @@ import { Dropdown, DropdownMenu, DropdownItem } from '@/components/Dropdown'
 import { isExternal } from '@/utils/validate'
 import config from '@/config/config'
 import api from '@/api/api'
+import Weather from '@/components/Header/src/Weather.vue'
 
 export default defineComponent({
   name: 'Navigation',
-  components: { Dropdown, DropdownMenu, DropdownItem },
+  components: { Dropdown, DropdownMenu, DropdownItem,Weather },
   setup() {
     const { t, te } = useI18n()
     const router = useRouter()

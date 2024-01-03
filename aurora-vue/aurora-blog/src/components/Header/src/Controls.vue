@@ -1,8 +1,9 @@
 <template>
-  <div class="header-controls absolute top-10 right-0 flex flex-row" @keydown.k="handleOpenModel" tabindex="0">
-    <span class="ob-drop-shadow" data-dia="search" @click="handleOpenModel">
-      <svg-icon icon-class="search" />
-    </span>
+<!--  <div class="header-controls absolute top-10 right-0 flex flex-row" @keydown.k="" tabindex="0">-->
+  <div class="header-controls absolute top-10 right-0 flex flex-row" tabindex="0">
+<!--    <span class="ob-drop-shadow" data-dia="search" @click="handleOpenModel">-->
+<!--      <svg-icon icon-class="search" />-->
+<!--    </span>-->
     <Dropdown v-if="multiLanguage === 1" @command="handleClick">
       <span class="ob-drop-shadow" data-dia="language">
         <svg-icon icon-class="globe" />
@@ -263,9 +264,9 @@ export default defineComponent({
         }
       })
     }
-    const handleOpenModel: any = (status: boolean) => {
-      searchStore.setOpenModal(status)
-    }
+    // const handleOpenModel: any = (status: boolean) => {
+    //   searchStore.setOpenModal(status)
+    // }
 
     const qqLogin = () => {
       userStore.currentUrl = route.path
@@ -322,7 +323,7 @@ export default defineComponent({
         })
     }
     return {
-      handleOpenModel,
+      //handleOpenModel,
       loginInfo,
       ...toRefs(reactiveDate),
       userInfo: toRef(userStore.$state, 'userInfo'),

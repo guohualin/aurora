@@ -24,6 +24,11 @@ public class FriendLinkAdminDTO {
 
     private String linkIntro;
 
+    /**
+     * 状态0正常1删除
+     */
+    private String status;
+
     private LocalDateTime createTime;
 
 }

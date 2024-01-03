@@ -109,5 +109,15 @@ export default {
   },
   accessArticle: (params: any) => {
     return axios.post('/api/articles/access', params)
+  },
+  getWeather:(params: any)=>{
+    return axios.get('/api/api/weather',{
+      params: {
+        userCity:params
+      }
+    })
+  },
+  getUserCity: ()=>{
+    return axios.get('https://myhkw.cn/open/ip?key=4a25b1b0b4fa4a10b057acf5f6de3d51&type=json');
   }
 }

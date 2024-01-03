@@ -20,6 +20,7 @@ import static com.aurora.constant.OptTypeConstant.*;
 
 @Api(tags = "友链模块")
 @RestController
+@RequestMapping
 public class FriendLinkController {
 
     @Autowired
@@ -50,6 +51,18 @@ public class FriendLinkController {
     @DeleteMapping("/admin/links")
     public ResultVO<?> deleteFriendLink(@RequestBody List<Integer> linkIdList) {
         friendLinkService.removeByIds(linkIdList);
+        return ResultVO.ok();
+    }
+
+    /**
+     * 修改友链状态
+     * @param friendLinkVO
+     * @return ResultVO<?>
+     */
+
+    @PostMapping("/admin/updateLinksStatus")
+    public ResultVO<?> updateLinksStatus(@RequestBody FriendLinkVO friendLinkVO) {
+        friendLinkService.saveOrUpdateFriendLink(friendLinkVO);
         return ResultVO.ok();
     }
 }

@@ -27,10 +27,22 @@ public class FriendLink {
 
     private String linkIntro;
 
+    /**
+     * 状态 0正常1失效
+     */
+    private String status;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

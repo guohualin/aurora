@@ -258,6 +258,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 .id(articleTopFeaturedVO.getId())
                 .isTop(articleTopFeaturedVO.getIsTop())
                 .isFeatured(articleTopFeaturedVO.getIsFeatured())
+                .status(articleTopFeaturedVO.getStatus())
                 .build();
         articleMapper.updateById(article);
     }

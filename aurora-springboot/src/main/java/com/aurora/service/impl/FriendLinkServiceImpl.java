@@ -5,12 +5,14 @@ import com.aurora.model.dto.FriendLinkDTO;
 import com.aurora.entity.FriendLink;
 import com.aurora.mapper.FriendLinkMapper;
 import com.aurora.service.FriendLinkService;
+import com.aurora.util.BasicCommonConstant;
 import com.aurora.util.BeanCopyUtil;
 import com.aurora.util.PageUtil;
 import com.aurora.model.vo.ConditionVO;
 import com.aurora.model.vo.FriendLinkVO;
 import com.aurora.model.dto.PageResultDTO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
@@ -25,9 +27,15 @@ public class FriendLinkServiceImpl extends ServiceImpl<FriendLinkMapper, FriendL
     @Autowired
     private FriendLinkMapper friendLinkMapper;
 
+    /**
+     * 页面友链查询
+     * @return
+     */
     @Override
     public List<FriendLinkDTO> listFriendLinks() {
-        List<FriendLink> friendLinks = friendLinkMapper.selectList(null);
+        LambdaQueryWrapper<FriendLink> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(FriendLink::getStatus, BasicCommonConstant.NO);
+        List<FriendLink> friendLinks = friendLinkMapper.selectList(queryWrapper);
         return BeanCopyUtil.copyList(friendLinks, FriendLinkDTO.class);
     }
 
@@ -44,6 +52,21 @@ public class FriendLinkServiceImpl extends ServiceImpl<FriendLinkMapper, FriendL
     public void saveOrUpdateFriendLink(FriendLinkVO friendLinkVO) {
         FriendLink friendLink = BeanCopyUtil.copyObject(friendLinkVO, FriendLink.class);
         this.saveOrUpdate(friendLink);
+    }
+
+    /**
+     * 修改友链状态
+     * @param friendLinkVO
+     * @return
+     */
+    @Override
+    public void updateLinksStatus(FriendLinkVO friendLinkVO) {
+
+        FriendLink friendLink = new FriendLink();
+        friendLink.setId(friendLinkVO.getId());
+        friendLink.setStatus(friendLinkVO.getStatus());
+
+        this.updateById(friendLink);
     }
 
 }

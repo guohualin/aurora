@@ -151,6 +151,10 @@ public class AuroraInfoServiceImpl implements AuroraInfoService {
         redisService.del(WEBSITE_CONFIG);
     }
 
+    /**
+     * 获取web站点基础配置信息
+     * @return
+     */
     @Override
     public WebsiteConfigDTO getWebsiteConfig() {
         WebsiteConfigDTO websiteConfigDTO;

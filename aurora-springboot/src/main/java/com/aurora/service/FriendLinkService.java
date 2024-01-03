@@ -18,4 +18,11 @@ public interface FriendLinkService extends IService<FriendLink> {
 
     void saveOrUpdateFriendLink(FriendLinkVO friendLinkVO);
 
+    /**
+     * 修改友链状态
+     * @param friendLinkVO
+     * @return
+     */
+    void updateLinksStatus(FriendLinkVO friendLinkVO);
+
 }

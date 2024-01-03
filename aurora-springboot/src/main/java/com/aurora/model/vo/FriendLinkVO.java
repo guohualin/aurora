@@ -35,4 +35,16 @@ public class FriendLinkVO {
     @ApiModelProperty(name = "linkIntro", value = "友链头像", dataType = "String", required = true)
     private String linkIntro;
 
+    /**
+     * 状态 0正常1失效
+     */
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

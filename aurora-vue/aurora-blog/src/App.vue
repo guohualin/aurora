@@ -1,20 +1,22 @@
 <template>
   <div id="App-Wrapper" :class="[appWrapperClass, theme]" :style="wrapperStyle">
-    <div
-      id="App-Container"
-      class="app-container max-w-10/12 lg:max-w-screen-2xl px-3 lg:px-8"
-      @keydown.meta.k.stop.prevent=""
-      tabindex="-1"
-      :style="cssVariables">
-      <HeaderMain />
-      <div class="app-banner app-banner-image" :style="headerImage" />
-      <div class="app-banner app-banner-screen" :style="headerBaseBackground" />
-      <div class="relative z-10">
-        <router-view v-slot="{ Component }">
-          <transition name="fade-slide-y" mode="out-in">
-            <component :is="Component" />
-          </transition>
-        </router-view>
+    <div :style="allBackgroundImage">
+      <div
+        id="App-Container"
+        class="app-container max-w-10/12 lg:max-w-screen-2xl px-3 lg:px-8"
+        @keydown.meta.k.stop.prevent=""
+        tabindex="-1"
+        :style="cssVariables">
+        <HeaderMain />
+<!--        <div class="app-banner app-banner-image" :style="headerImage" /`>-->
+        <div class="app-banner app-banner-screen" :style="headerBaseBackground" />
+        <div class="relative z-10">
+          <router-view v-slot="{ Component }">
+            <transition name="fade-slide-y" mode="out-in">
+              <component :is="Component" />
+            </transition>
+          </router-view>
+        </div>
       </div>
     </div>
     <div id="loading-bar-wrapper" :class="loadingBarClass"></div>
@@ -164,7 +166,7 @@ export default defineComponent({
       }),
       headerBaseBackground: computed(() => {
         return {
-          background: appStore.themeConfig.header_gradient_css,
+          //background: appStore.themeConfig.header_gradient_css,
           opacity: commonStore.headerImage !== '' ? 0.91 : 0.99
         }
       }),
@@ -186,7 +188,16 @@ export default defineComponent({
         `
       }),
       appWrapperClass,
-      loadingBarClass
+      loadingBarClass,
+      allBackgroundImage: computed(() => {
+        return {
+          backgroundImage: `url(${require('@/assets/beijingtu.jpg')})`,
+          backgroundSize:`cover`,
+          width:`100%`,
+          height:`100%`,
+          backgroundAttachment:`fixed`
+        }
+      }),
     }
   }
 })

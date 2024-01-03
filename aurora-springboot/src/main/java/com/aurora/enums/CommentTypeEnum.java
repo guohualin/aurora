@@ -15,7 +15,7 @@ public enum CommentTypeEnum {
 
     LINK(4, "友链", "/friends/"),
 
-    TALK(5, "说说", "/talks/");
+    TALK(5, "日常", "/talks/");
 
     private final Integer type;
 

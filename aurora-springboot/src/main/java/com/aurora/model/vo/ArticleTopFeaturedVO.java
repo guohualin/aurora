@@ -20,4 +20,6 @@ public class ArticleTopFeaturedVO {
 
     @NotNull(message = "是否推荐不能为空")
     private Integer isFeatured;
+
+    private Integer status;
 }

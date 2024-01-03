@@ -11,6 +11,10 @@ public interface AuroraInfoService {
 
     void report();
 
+    /**
+     * 登录时调用获取初始化信息
+     * @return
+     */
     AuroraHomeInfoDTO getAuroraHomeInfo();
 
     AuroraAdminInfoDTO getAuroraAdminInfo();

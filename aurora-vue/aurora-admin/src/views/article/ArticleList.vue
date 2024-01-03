@@ -45,7 +45,8 @@
         :headers="uploadHeaders"
         :on-success="uploadArticle">
         <el-button type="primary" size="small" icon="el-icon-upload"> 批量导入 </el-button>
-      </el-upload>
+      </el-upload></div>
+    <div>
       <div style="margin-left: auto">
         <el-select
           clearable
@@ -157,6 +158,18 @@
             :active-value="1"
             :inactive-value="0"
             @change="changeTopAndFeatured(scope.row)" />
+        </template>
+      </el-table-column>
+      <el-table-column prop="isFeatured" label="状态" width="80" align="center">
+        <template slot-scope="scope">
+          <el-switch
+              v-model="scope.row.status"
+              active-color="#13ce66"
+              inactive-color="#F4F4F5"
+              :disabled="scope.row.isDelete == 1"
+              :active-value="1"
+              :inactive-value="2"
+              @change="changeTopAndFeatured(scope.row)" />
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="150">
@@ -420,7 +433,8 @@ export default {
         .put('/api/admin/articles/topAndFeatured', {
           id: article.id,
           isTop: article.isTop,
-          isFeatured: article.isFeatured
+          isFeatured: article.isFeatured,
+          status: article.status
         })
         .then(({ data }) => {
           if (data.flag) {

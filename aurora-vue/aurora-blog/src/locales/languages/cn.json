@@ -6,7 +6,7 @@
     "categories": "分类",
     "tags": "标签",
     "post": "文章",
-    "talks":"说说",
+    "talks":"日常",
     "message": "留言",
     "friends": "朋友们",
     "album": "相册",
@@ -18,7 +18,7 @@
   },
   "titles": {
     "articles": "文章列表",
-    "talks":"说说",
+    "talks":"日常",
     "about": "关于",
     "category_list": "分类目录",
     "tag_list": "标签目录",
@@ -33,7 +33,7 @@
   "settings": {
     "months": ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
     "articles": "文章",
-    "talks": "说说",
+    "talks": "日常",
     "categories": "分类",
     "tags": "标签",
     "words": "文字",

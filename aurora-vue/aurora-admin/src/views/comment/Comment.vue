@@ -87,7 +87,7 @@
           <el-tag v-if="scope.row.type == 2" type="danger">留言</el-tag>
           <el-tag v-if="scope.row.type == 3" type="success">关于我</el-tag>
           <el-tag v-if="scope.row.type == 4" type="warning">友链</el-tag>
-          <el-tag v-if="scope.row.type == 5" type="warning">说说</el-tag>
+          <el-tag v-if="scope.row.type == 5" type="warning">日常</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="160" align="center">
