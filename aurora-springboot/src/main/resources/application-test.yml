@@ -7,7 +7,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/aurora?serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
-    password: 751022
+    password: ugubnguiju
     hikari:
       minimum-idle: 10
       idle-timeout: 180000
@@ -48,8 +48,8 @@ spring:
 
   mail:
     host: smtp.163.com
-    username: 15010935207@163.com
-    password: Ghl970920..
+    username: 15908765207@163.com
+    password: hgdsuj987..
     default-encoding: UTF-8
     protocol: smtp
     port: 465
