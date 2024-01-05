@@ -52,9 +52,11 @@ public class PhotoAlbumServiceImpl extends ServiceImpl<PhotoAlbumMapper, PhotoAl
 
     @Override
     public PageResultDTO<PhotoAlbumAdminDTO> listPhotoAlbumsAdmin(ConditionVO conditionVO) {
-        Integer count = photoAlbumMapper.selectCount(new LambdaQueryWrapper<PhotoAlbum>()
+        LambdaQueryWrapper<PhotoAlbum> queryWrapper = new LambdaQueryWrapper<PhotoAlbum>()
                 .like(StringUtils.isNotBlank(conditionVO.getKeywords()), PhotoAlbum::getAlbumName, conditionVO.getKeywords())
-                .eq(PhotoAlbum::getIsDelete, FALSE));
+                .eq(PhotoAlbum::getIsDelete, FALSE);
+
+        Integer count = photoAlbumMapper.selectCount(queryWrapper).intValue();
         if (count == 0) {
             return new PageResultDTO<>();
         }
@@ -72,9 +74,12 @@ public class PhotoAlbumServiceImpl extends ServiceImpl<PhotoAlbumMapper, PhotoAl
     @Override
     public PhotoAlbumAdminDTO getPhotoAlbumByIdAdmin(Integer albumId) {
         PhotoAlbum photoAlbum = photoAlbumMapper.selectById(albumId);
-        Integer photoCount = photoMapper.selectCount(new LambdaQueryWrapper<Photo>()
+
+        LambdaQueryWrapper<Photo> queryWrapper = new LambdaQueryWrapper<Photo>()
                 .eq(Photo::getAlbumId, albumId)
-                .eq(Photo::getIsDelete, FALSE));
+                .eq(Photo::getIsDelete, FALSE);
+
+        Integer photoCount = photoMapper.selectCount(queryWrapper).intValue();
         PhotoAlbumAdminDTO album = BeanCopyUtil.copyObject(photoAlbum, PhotoAlbumAdminDTO.class);
         album.setPhotoCount(photoCount);
         return album;
@@ -83,8 +88,9 @@ public class PhotoAlbumServiceImpl extends ServiceImpl<PhotoAlbumMapper, PhotoAl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deletePhotoAlbumById(Integer albumId) {
-        Integer count = photoMapper.selectCount(new LambdaQueryWrapper<Photo>()
-                .eq(Photo::getAlbumId, albumId));
+        LambdaQueryWrapper<Photo> queryWrapper = new LambdaQueryWrapper<Photo>()
+                .eq(Photo::getAlbumId, albumId);
+        Integer count = photoMapper.selectCount(queryWrapper).intValue();
         if (count > 0) {
             photoAlbumMapper.updateById(PhotoAlbum.builder()
                     .id(albumId)

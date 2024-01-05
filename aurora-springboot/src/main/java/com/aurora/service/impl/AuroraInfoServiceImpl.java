@@ -92,10 +92,10 @@ public class AuroraInfoServiceImpl implements AuroraInfoService {
     @SneakyThrows
     @Override
     public AuroraHomeInfoDTO getAuroraHomeInfo() {
-        CompletableFuture<Integer> asyncArticleCount = CompletableFuture.supplyAsync(() -> articleMapper.selectCount(new LambdaQueryWrapper<Article>().eq(Article::getIsDelete, FALSE)));
-        CompletableFuture<Integer> asyncCategoryCount = CompletableFuture.supplyAsync(() -> categoryMapper.selectCount(null));
-        CompletableFuture<Integer> asyncTagCount = CompletableFuture.supplyAsync(() -> tagMapper.selectCount(null));
-        CompletableFuture<Integer> asyncTalkCount = CompletableFuture.supplyAsync(() -> talkMapper.selectCount(null));
+        CompletableFuture<Integer> asyncArticleCount = CompletableFuture.supplyAsync(() -> articleMapper.selectCount(new LambdaQueryWrapper<Article>().eq(Article::getIsDelete, FALSE)).intValue());
+        CompletableFuture<Integer> asyncCategoryCount = CompletableFuture.supplyAsync(() -> categoryMapper.selectCount(null).intValue());
+        CompletableFuture<Integer> asyncTagCount = CompletableFuture.supplyAsync(() -> tagMapper.selectCount(null).intValue());
+        CompletableFuture<Integer> asyncTalkCount = CompletableFuture.supplyAsync(() -> talkMapper.selectCount(null).intValue());
         CompletableFuture<WebsiteConfigDTO> asyncWebsiteConfig = CompletableFuture.supplyAsync(this::getWebsiteConfig);
         CompletableFuture<Integer> asyncViewCount = CompletableFuture.supplyAsync(() -> {
             Object count = redisService.get(BLOG_VIEWS_COUNT);
@@ -114,10 +114,10 @@ public class AuroraInfoServiceImpl implements AuroraInfoService {
     public AuroraAdminInfoDTO getAuroraAdminInfo() {
         Object count = redisService.get(BLOG_VIEWS_COUNT);
         Integer viewsCount = Integer.parseInt(Optional.ofNullable(count).orElse(0).toString());
-        Integer messageCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>().eq(Comment::getType, 2));
-        Integer userCount = userInfoMapper.selectCount(null);
+        Integer messageCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>().eq(Comment::getType, 2)).intValue();
+        Integer userCount = userInfoMapper.selectCount(null).intValue();
         Integer articleCount = articleMapper.selectCount(new LambdaQueryWrapper<Article>()
-                .eq(Article::getIsDelete, FALSE));
+                .eq(Article::getIsDelete, FALSE)).intValue();
         List<UniqueViewDTO> uniqueViews = uniqueViewService.listUniqueViews();
         List<ArticleStatisticsDTO> articleStatisticsDTOs = articleMapper.listArticleStatistics();
         List<CategoryDTO> categoryDTOs = categoryMapper.listCategories();

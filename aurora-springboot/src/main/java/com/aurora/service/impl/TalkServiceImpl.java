@@ -43,7 +43,7 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements Ta
     @Override
     public PageResultDTO<TalkDTO> listTalks() {
         Integer count = talkMapper.selectCount((new LambdaQueryWrapper<Talk>()
-                .eq(Talk::getStatus, PUBLIC.getStatus())));
+                .eq(Talk::getStatus, PUBLIC.getStatus()))).intValue();
         if (count == 0) {
             return new PageResultDTO<>();
         }
@@ -94,7 +94,7 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements Ta
     @Override
     public PageResultDTO<TalkAdminDTO> listBackTalks(ConditionVO conditionVO) {
         Integer count = talkMapper.selectCount(new LambdaQueryWrapper<Talk>()
-                .eq(Objects.nonNull(conditionVO.getStatus()), Talk::getStatus, conditionVO.getStatus()));
+                .eq(Objects.nonNull(conditionVO.getStatus()), Talk::getStatus, conditionVO.getStatus())).intValue();
         if (count == 0) {
             return new PageResultDTO<>();
         }

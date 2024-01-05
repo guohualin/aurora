@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSON;
 import com.aurora.model.dto.ArticleSearchDTO;
 import com.aurora.model.dto.UserAreaDTO;
 import com.aurora.entity.*;
-import com.aurora.mapper.ElasticsearchMapper;
 import com.aurora.mapper.UniqueViewMapper;
 import com.aurora.mapper.UserAuthMapper;
 import com.aurora.service.*;
@@ -56,9 +55,6 @@ public class AuroraQuartz {
 
     @Autowired
     private RestTemplate restTemplate;
-
-    @Autowired
-    private ElasticsearchMapper elasticsearchMapper;
 
 
     @Value("${website.url}")
@@ -126,13 +122,5 @@ public class AuroraQuartz {
                     .build());
         }
         roleResourceService.saveBatch(roleResources);
-    }
-
-    public void importDataIntoES() {
-        elasticsearchMapper.deleteAll();
-        List<Article> articles = articleService.list();
-        for (Article article : articles) {
-            elasticsearchMapper.save(BeanCopyUtil.copyObject(article, ArticleSearchDTO.class));
-        }
     }
 }

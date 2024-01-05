@@ -7,9 +7,12 @@ module.exports = defineConfig({
   transpileDependencies: true,
   productionSourceMap: false,
   devServer: {
+    hot: true,
+    port: 8086,//端口号
     proxy: {
       '/api': {
-        target: 'https://www.linhaojun.top/api',
+        target: 'http://127.0.0.1:8080',
+        //target: 'http://60.205.204.59:8080',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

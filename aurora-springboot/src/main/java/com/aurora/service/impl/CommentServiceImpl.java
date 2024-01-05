@@ -105,7 +105,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 .eq(Objects.nonNull(commentVO.getTopicId()), Comment::getTopicId, commentVO.getTopicId())
                 .eq(Comment::getType, commentVO.getType())
                 .isNull(Comment::getParentId)
-                .eq(Comment::getIsReview, TRUE));
+                .eq(Comment::getIsReview, TRUE)).intValue();
         if (commentCount == 0) {
             return new PageResultDTO<>();
         }

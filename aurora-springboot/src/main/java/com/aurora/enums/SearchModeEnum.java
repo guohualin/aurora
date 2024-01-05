@@ -7,9 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SearchModeEnum {
 
-    MYSQL("mysql", "mySqlSearchStrategyImpl"),
-
-    ELASTICSEARCH("elasticsearch", "esSearchStrategyImpl");
+    MYSQL("mysql", "mySqlSearchStrategyImpl");
 
     private final String mode;
 
