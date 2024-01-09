@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableTransactionManagement
-@RefreshScope
+//@RefreshScope
 @MapperScan("com.aurora.mapper")
 public class AuroraSpringbootApplication {
 
