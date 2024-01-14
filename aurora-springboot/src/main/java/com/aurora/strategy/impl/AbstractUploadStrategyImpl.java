@@ -3,6 +3,8 @@ package com.aurora.strategy.impl;
 import com.aurora.exception.BizException;
 import com.aurora.strategy.UploadStrategy;
 import com.aurora.util.FileUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,6 +12,7 @@ import java.io.*;
 
 @Service
 public abstract class AbstractUploadStrategyImpl implements UploadStrategy {
+    private Logger logger = LoggerFactory.getLogger(AbstractUploadStrategyImpl.class);
 
     @Override
     public String uploadFile(MultipartFile file, String path) {
@@ -22,7 +25,7 @@ public abstract class AbstractUploadStrategyImpl implements UploadStrategy {
             }
             return getFileAccessUrl(path + fileName);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("文件或图片上传失败:",e);
             throw new BizException("文件上传失败");
         }
     }

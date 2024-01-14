@@ -1,7 +1,7 @@
 export default {
   qqLogin: {
     QQ_APP_ID: '758014943',
-    QQ_REDIRECT_URI: 'https://60.205.204.59:8086/oauth/login/qq'
+    QQ_REDIRECT_URI: 'https://dalinguo.cn/oauth/login/qq'
   },
   routes: [
     {
