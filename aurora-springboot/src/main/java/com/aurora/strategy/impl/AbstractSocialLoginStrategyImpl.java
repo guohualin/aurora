@@ -55,13 +55,20 @@ public abstract class AbstractSocialLoginStrategyImpl implements SocialLoginStra
     @Override
     public UserInfoDTO login(String data) {
         UserDetailsDTO userDetailsDTO;
+
+        //获取三方登录的token信息
         SocialTokenDTO socialToken = getSocialToken(data);
+
+        //根据openId获取用户唯一信息
+        UserAuth user = getUserAuth(socialToken);
+
         String ipAddress = IpUtil.getIpAddress(request);
         String ipSource = IpUtil.getIpSource(ipAddress);
-        UserAuth user = getUserAuth(socialToken);
         if (Objects.nonNull(user)) {
+            //用户存在直接返回登录信息
             userDetailsDTO = getUserDetail(user, ipAddress, ipSource);
         } else {
+            //新用户自动注册
             userDetailsDTO = saveUserDetail(socialToken, ipAddress, ipSource);
         }
         if (userDetailsDTO.getIsDisable().equals(TRUE)) {
@@ -80,9 +87,14 @@ public abstract class AbstractSocialLoginStrategyImpl implements SocialLoginStra
     public abstract SocialUserInfoDTO getSocialUserInfo(SocialTokenDTO socialTokenDTO);
 
     private UserAuth getUserAuth(SocialTokenDTO socialTokenDTO) {
-        return userAuthMapper.selectOne(new LambdaQueryWrapper<UserAuth>()
+
+        LambdaQueryWrapper<UserAuth> eq = new LambdaQueryWrapper<UserAuth>()
                 .eq(UserAuth::getUsername, socialTokenDTO.getOpenId())
-                .eq(UserAuth::getLoginType, socialTokenDTO.getLoginType()));
+                .eq(UserAuth::getLoginType, socialTokenDTO.getLoginType());
+
+        UserAuth userAuth = userAuthMapper.selectOne(eq);
+
+        return userAuth;
     }
 
     private UserDetailsDTO getUserDetail(UserAuth user, String ipAddress, String ipSource) {
