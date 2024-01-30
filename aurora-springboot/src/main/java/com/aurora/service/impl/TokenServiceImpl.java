@@ -41,7 +41,7 @@ public class TokenServiceImpl implements TokenService {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         SecretKey secretKey = generalKey();
         return Jwts.builder().setId(getUuid()).setSubject(subject)
-                .setIssuer("huaweimian")
+                .setIssuer("daLin")
                 .signWith(signatureAlgorithm, secretKey).compact();
     }
 

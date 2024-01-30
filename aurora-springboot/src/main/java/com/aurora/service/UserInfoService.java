@@ -27,5 +27,4 @@ public interface UserInfoService extends IService<UserInfo> {
     void removeOnlineUser(Integer userInfoId);
 
     UserInfoDTO getUserInfoById(Integer id);
-
 }

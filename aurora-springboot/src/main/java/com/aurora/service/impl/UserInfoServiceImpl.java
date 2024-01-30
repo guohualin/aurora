@@ -1,5 +1,8 @@
 package com.aurora.service.impl;
 
+import com.aurora.constant.CommonConstant;
+import com.aurora.enums.LoginTypeEnum;
+import com.aurora.enums.RoleEnum;
 import com.aurora.model.dto.PageResultDTO;
 import com.aurora.model.dto.UserDetailsDTO;
 import com.aurora.model.dto.UserInfoDTO;
@@ -11,18 +14,19 @@ import com.aurora.enums.FilePathEnum;
 import com.aurora.exception.BizException;
 import com.aurora.mapper.UserAuthMapper;
 import com.aurora.mapper.UserInfoMapper;
-import com.aurora.service.RedisService;
-import com.aurora.service.TokenService;
-import com.aurora.service.UserInfoService;
-import com.aurora.service.UserRoleService;
+import com.aurora.service.*;
 import com.aurora.strategy.context.UploadStrategyContext;
+import com.aurora.util.BasicCommonConstant;
+import com.aurora.util.BasicObjectUtils;
 import com.aurora.util.BeanCopyUtil;
 import com.aurora.util.UserUtil;
 import com.aurora.model.vo.*;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +44,12 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Autowired
     private UserInfoMapper userInfoMapper;
+
+    @Autowired
+    private UserAuthService userAuthService;
+
+    @Autowired
+    private AuroraInfoService auroraInfoService;
 
     @Autowired
     private UserAuthMapper userAuthMapper;
@@ -171,5 +181,4 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         UserInfo userInfo = userInfoMapper.selectById(id);
         return BeanCopyUtil.copyObject(userInfo, UserInfoDTO.class);
     }
-
 }

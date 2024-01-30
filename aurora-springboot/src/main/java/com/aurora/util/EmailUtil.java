@@ -30,7 +30,7 @@ public class EmailUtil {
     public void sendHtmlMail(EmailDTO emailDTO) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,true, "UTF-8");
             Context context = new Context();
             context.setVariables(emailDTO.getCommentMap());
             String process = templateEngine.process(emailDTO.getTemplate(), context);

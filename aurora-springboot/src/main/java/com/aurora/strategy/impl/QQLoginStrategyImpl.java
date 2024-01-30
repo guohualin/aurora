@@ -11,6 +11,8 @@ import com.aurora.enums.LoginTypeEnum;
 import com.aurora.exception.BizException;
 import com.aurora.util.CommonUtil;
 import com.aurora.model.vo.QQLoginVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,6 +26,7 @@ import static com.aurora.enums.StatusCodeEnum.QQ_LOGIN_ERROR;
 
 @Service("qqLoginStrategyImpl")
 public class QQLoginStrategyImpl extends AbstractSocialLoginStrategyImpl {
+    private Logger logger = LoggerFactory.getLogger(QQLoginStrategyImpl.class);
 
     @Autowired
     private QQConfigProperties qqConfigProperties;
@@ -44,15 +47,21 @@ public class QQLoginStrategyImpl extends AbstractSocialLoginStrategyImpl {
 
     @Override
     public SocialUserInfoDTO getSocialUserInfo(SocialTokenDTO socialTokenDTO) {
+
+        logger.info("qq获取getSocialUserInfo---start---[{}]",socialTokenDTO);
+
         Map<String, String> formData = new HashMap<>(3);
         formData.put(QQ_OPEN_ID, socialTokenDTO.getOpenId());
         formData.put(ACCESS_TOKEN, socialTokenDTO.getAccessToken());
         formData.put(OAUTH_CONSUMER_KEY, qqConfigProperties.getAppId());
         QQUserInfoDTO qqUserInfoDTO = JSON.parseObject(restTemplate.getForObject(qqConfigProperties.getUserInfoUrl(), String.class, formData), QQUserInfoDTO.class);
-        return SocialUserInfoDTO.builder()
+        SocialUserInfoDTO build = SocialUserInfoDTO.builder()
                 .nickname(Objects.requireNonNull(qqUserInfoDTO).getNickname())
                 .avatar(qqUserInfoDTO.getFigureurl_qq_1())
                 .build();
+
+        logger.info("qq获取getSocialUserInfo---end---[{}]",build);
+        return build;
     }
 
     private void checkQQToken(QQLoginVO qqLoginVO) {
