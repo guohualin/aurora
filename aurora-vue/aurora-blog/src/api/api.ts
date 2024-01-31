@@ -119,5 +119,9 @@ export default {
   },
   getUserCity: ()=>{
     return axios.get('https://myhkw.cn/open/ip?key=4a25b1b0b4fa4a10b057acf5f6de3d51&type=json');
-  }
+  },
+  //微信获取二维码
+  getWeixinTicket: (params: any)=>{
+    return axios.post('/api/weixin/callBack', params)
+  },
 }

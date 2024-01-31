@@ -394,4 +394,10 @@ public class BasicCommonConstant {
 	 * redis文件失效关键字
 	 */
 	public final static String REDIS_TEMP_CHUNK_FILE = "redis_temp_chunk_file";
+
+	/**
+	 * 微信code
+	 */
+	public static final String WECHAT_CODE = "WECHAT_CODE_";
+	public static final String ACCESS_TOKEN = "ACCESS_TOKEN_ONLY";
 }

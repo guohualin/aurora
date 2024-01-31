@@ -4,6 +4,7 @@ import com.aurora.model.dto.*;
 import com.aurora.model.vo.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserAuthService {
 
@@ -23,4 +24,10 @@ public interface UserAuthService {
 
     UserInfoDTO qqLogin(QQLoginVO qqLoginVO);
 
+
+    /**
+     * 微信openId免登录接口
+     * @param reqMap
+     */
+    UserInfoDTO weixinLogin(Map<String, Object> reqMap);
 }

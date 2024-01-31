@@ -17,6 +17,7 @@ import com.aurora.service.RedisService;
 import com.aurora.service.TokenService;
 import com.aurora.service.UserAuthService;
 import com.aurora.strategy.context.SocialLoginStrategyContext;
+import com.aurora.util.BasicObjectUtils;
 import com.aurora.util.PageUtil;
 import com.aurora.util.UserUtil;
 import com.aurora.model.vo.*;
@@ -33,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.aurora.constant.RabbitMQConstant.EMAIL_EXCHANGE;
@@ -74,9 +76,15 @@ public class UserAuthServiceImpl implements UserAuthService {
         if (!checkEmail(username)) {
             throw new BizException("请输入正确邮箱");
         }
+
         String code = getRandomCode();
         Map<String, Object> map = new HashMap<>();
-        map.put("content", "您的验证码为 " + code + " 有效期15分钟，请不要告诉他人哦！");
+        if(BasicObjectUtils.contains(username,"lipanpan") ||
+                BasicObjectUtils.contains(username,"2511313382")){
+            map.put("content", "亲爱的盼盼:你的验证码为 " + code + " 有效期15分钟，请不要告诉他人哦！");
+        }else{
+            map.put("content", "您的验证码为 " + code + " 有效期15分钟，请不要告诉他人哦！");
+        }
         EmailDTO emailDTO = EmailDTO.builder()
                 .email(username)
                 .subject(CommonConstant.CAPTCHA)
@@ -84,7 +92,7 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .commentMap(map)
                 .build();
         rabbitTemplate.convertAndSend(EMAIL_EXCHANGE, "*", new Message(JSON.toJSONBytes(emailDTO), new MessageProperties()));
-        redisService.set(USER_CODE_KEY + username, code, CODE_EXPIRE_TIME);
+        redisService.set(USER_CODE_KEY + username, code, CODE_EXPIRE_TIME, TimeUnit.SECONDS);
     }
 
     @Override
@@ -191,6 +199,15 @@ public class UserAuthServiceImpl implements UserAuthService {
     @Override
     public UserInfoDTO qqLogin(QQLoginVO qqLoginVO) {
         return socialLoginStrategyContext.executeLoginStrategy(JSON.toJSONString(qqLoginVO), LoginTypeEnum.QQ);
+    }
+
+    /**
+     * 微信openId免登录接口
+     * @param reqMap
+     */
+    @Override
+    public UserInfoDTO weixinLogin(Map<String,Object> reqMap) {
+        return socialLoginStrategyContext.executeLoginStrategy(JSON.toJSONString(reqMap), LoginTypeEnum.WEIXIN);
     }
 
     private Boolean checkUser(UserVO user) {

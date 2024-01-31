@@ -1,9 +1,5 @@
 <template>
-<!--  <div class="header-controls absolute top-10 right-0 flex flex-row" @keydown.k="" tabindex="0">-->
   <div class="header-controls absolute top-10 right-0 flex flex-row" tabindex="0">
-<!--    <span class="ob-drop-shadow" data-dia="search" @click="handleOpenModel">-->
-<!--      <svg-icon icon-class="search" />-->
-<!--    </span>-->
     <Dropdown v-if="multiLanguage === 1" @command="handleClick">
       <span class="ob-drop-shadow" data-dia="language">
         <svg-icon icon-class="globe" />
@@ -16,7 +12,7 @@
       </DropdownMenu>
     </Dropdown>
     <template v-if="userInfo === ''">
-      <span class="mr-3" @click="openLoginDialog">{{ t('settings.login') }}</span>
+      <span class="mr-3 cursor-pointer login-text" @click="openLoginDialog">{{ t('settings.login') }}</span>
     </template>
     <template v-if="userInfo !== ''">
       <Dropdown hover>
@@ -39,47 +35,60 @@
       <ThemeToggle />
     </span>
   </div>
-  <el-dialog v-model="loginDialogVisible" width="30%" :fullscreen="isMobile">
-    <el-form @keyup.enter.native="login">
-      <el-form-item model="userInfo" class="mt-5">
-        <el-input v-model="loginInfo.username" placeholder="邮箱" />
-      </el-form-item>
-      <el-form-item model="userInfo" type="password" class="mt-8">
-        <el-input v-model="loginInfo.password" type="password" show-password placeholder="密码" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="login" size="large" class="mx-auto mt-3">登录</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="button" class="mx-auto my-el-button" @click="qqLogin">QQ登录</el-button>
-      </el-form-item>
-      <div class="mt-8">
-        <span class="text" @click="openRegisterDialog">立即注册</span>
-        <span class="text float-right" @click="openForgetPasswordDialog">忘记密码?</span>
+  <div id="userLogin">
+    <el-dialog v-model="loginDialogVisible" width="100" :fullscreen="isMobile" top="3rem"
+               custom-class="login-dialog-body" :show-close="false">
+      <div class="userLogin-container">
+        <div class="form-box">
+          <!-- 邮箱注册 -->
+          <div class="register-box hidden">
+            <h1>register</h1>
+            <input type="text" v-model="loginInfo.username" placeholder="请输入邮箱"
+                   maxlength="50"
+                   style="width: 55% !important;position: relative;left: -7.4%;margin: 0 !important;">
+            <button class="change-name-btn" @click="sendCode" >
+              发送
+            </button>
+            <input type="test" v-model="loginInfo.code" placeholder="输入验证码">
+            <input type="password" v-model="loginInfo.password" placeholder="输入密码">
+            <button @click="register()">注册</button>
+          </div>
+          <!-- 微信登录 -->
+          <div class="weixinLog-box hidden">
+            <img :src="require('@/assets/QR.png')" alt="" style="width: 50%;">
+            <h2>关注公众号后发送<b style="color: #d87184;">“验证码”</b>获取验证码</h2>
+            <input type="text" v-model="loginInfo.code" placeholder="输入验证码">
+            <button @click="weixinLogin()">登录</button>
+            <button @click="otherLogin()">其他登录方式</button>
+          </div>
+          <!-- 登录 -->
+          <div class="login-box">
+            <h1>login</h1>
+            <input type="text" v-model="loginInfo.username" placeholder="昵称">
+            <input type="password" v-model="loginInfo.password" placeholder="密码">
+            <button @click="login()">登录</button>
+            <button @click="qqLogin()">QQ登录</button>
+            <button @click="goWeixin()">微信登录</button>
+          </div>
+        </div>
+        <div class="con-box left">
+          <h2>欢迎来到<span>daLin</span></h2>
+          <p><span>施主</span>请登记</p>
+          <img src="https://upload-bbs.mihoyo.com/upload/2022/11/06/171096414/940133f586bc69ca3442f202bd6c6281_1342243714944418976.gif" alt="">
+          <p>已有账号?</p>
+          <button id="login" @click="goLogin">去登录</button>
+        </div>
+        <div class="con-box right">
+          <h2>欢迎来到<span>daLin</span></h2>
+          <img alt="Static Badge" src="https://img.shields.io/badge/Beta-blue" style="width: unset;height: unset;margin: 0;opacity: 1;padding-top: 12px">
+          <!--        <img :src="require('@/assets/ddde66d4a8147c46a9ef89c48c5d6196.jpg')" alt="" style="transform: scale(1.3);z-index: -1">-->
+          <img src="https://upload-bbs.mihoyo.com/upload/2022/11/06/171096414/940133f586bc69ca3442f202bd6c6281_1342243714944418976.gif" alt="" style="transform: scale(1.3);z-index: -1">
+          <p>第一次来?</p>
+          <button id="register" @click="goRegister">去注册</button>
+        </div>
       </div>
-    </el-form>
-  </el-dialog>
-  <el-dialog v-model="registerDialogVisible" width="30%" :fullscreen="isMobile">
-    <el-form>
-      <el-form-item model="userInfo" class="mt-5">
-        <el-input v-model="loginInfo.username" placeholder="邮箱" />
-      </el-form-item>
-      <el-form-item model="userInfo" class="mt-8">
-        <el-input v-model="loginInfo.code" placeholder="验证码">
-          <template #append>
-            <span class="text" @click="sendCode">发送</span>
-          </template>
-        </el-input>
-      </el-form-item>
-      <el-form-item model="userInfo" type="password" class="mt-8">
-        <el-input v-model="loginInfo.password" type="password" show-password placeholder="密码" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="register" size="large" class="mx-auto mt-3">注册</el-button>
-      </el-form-item>
-      <span class="text" @click="returnLoginDialog">已有帐号?登录</span>
-    </el-form>
-  </el-dialog>
+    </el-dialog>
+  </div>
   <el-dialog v-model="forgetPasswordDialogVisible" width="30%" :fullscreen="isMobile">
     <el-form>
       <el-form-item model="userInfo" class="mt-5">
@@ -152,11 +161,13 @@ export default defineComponent({
     const loginInfo = reactive({
       username: '' as any,
       password: '' as any,
-      code: '' as any
+      code: '' as any,
+      val_password: '' as any
     })
     const reactiveDate = reactive({
       loginDialogVisible: false,
       registerDialogVisible: false,
+      weixinLogVisible: false,
       forgetPasswordDialogVisible: false,
       articlePasswordDialogVisible: false,
       articlePassword: '',
@@ -199,6 +210,33 @@ export default defineComponent({
         }
       })
     }
+    const weixinLogin = () => {
+      if (loginInfo.code.trim().length  == 0) {
+        proxy.$notify({
+          title: 'Warning',
+          message: '验证码不能为空',
+          type: 'warning'
+        })
+        return
+      }
+      let params = new URLSearchParams()
+      params.append('code', loginInfo.code)
+      api.getWeixinTicket(params).then(({ data }) => {
+        console.log(data);
+        if (data.flag) {
+          userStore.userInfo = data.data
+          sessionStorage.setItem('token', data.data.token)
+          userStore.token = data.data.token
+          proxy.$notify({
+            title: 'Success',
+            message: '登录成功',
+            type: 'success'
+          })
+          reactiveDate.loginDialogVisible = false
+        }
+      })
+    }
+
     const logout = () => {
       api.logout().then(({ data }) => {
         if (data.flag) {
@@ -214,19 +252,80 @@ export default defineComponent({
         }
       })
     }
+    const goLogin = () => {
+      let form_box = document.getElementsByClassName('form-box')[0] as HTMLElement;
+      let register_box = document.getElementsByClassName('register-box')[0];
+      let weixinLog_box = document.getElementsByClassName('weixinLog-box')[0];
+      let login_box = document.getElementsByClassName('login-box')[0];
+      form_box.style.transform = 'translateX(0%)';
+      register_box.classList.add('hidden');
+      weixinLog_box.classList.add('hidden');
+      login_box.classList.remove('hidden');
+    }
+    const goWeixin = () => {
+      loginInfo.username = '';
+      loginInfo.password = '';
+      loginInfo.val_password = '';
+      // 卡片切换
+      nextTick(() => {
+        let form_box = document.getElementsByClassName('form-box')[0] as HTMLElement;
+        let register_box = document.getElementsByClassName('register-box')[0];
+        let login_box = document.getElementsByClassName('login-box')[0];
+        let weixinLog_box = document.getElementsByClassName('weixinLog-box')[0];
+        form_box.style.transform = 'translateX(80%)';
+        login_box.classList.add('hidden');
+        register_box.classList.add('hidden');
+        weixinLog_box.classList.remove('hidden');
+      })
+    }
+    const goRegister = () => {
+      loginInfo.username = '';
+      loginInfo.password = '';
+      loginInfo.val_password = '';
+      // 卡片切换
+      nextTick(() => {
+        let form_box = document.getElementsByClassName('form-box')[0] as HTMLElement;
+        let register_box = document.getElementsByClassName('register-box')[0];
+        let weixinLog_box = document.getElementsByClassName('weixinLog-box')[0];
+        let login_box = document.getElementsByClassName('login-box')[0];
+        form_box.style.transform = 'translateX(80%)';
+        login_box.classList.add('hidden');
+        weixinLog_box.classList.add('hidden');
+        register_box.classList.remove('hidden');
+      })
+    }
+    const otherLogin = () => {
+      loginInfo.username = '';
+      loginInfo.password = '';
+      loginInfo.val_password = '';
+      // 卡片切换
+      nextTick(() => {
+        let form_box = document.getElementsByClassName('form-box')[0] as HTMLElement;
+        let register_box = document.getElementsByClassName('register-box')[0];
+        let weixinLog_box = document.getElementsByClassName('weixinLog-box')[0];
+        let login_box = document.getElementsByClassName('login-box')[0];
+        form_box.style.transform = 'translateX(0%)';
+        register_box.classList.add('hidden');
+        weixinLog_box.classList.add('hidden');
+        login_box.classList.remove('hidden');
+      })
+    }
     const openUserCenter = () => {
       userStore.userVisible = true
     }
     const openLoginDialog = () => {
       reactiveDate.loginDialogVisible = true
     }
+
     const openRegisterDialog = () => {
       loginInfo.code = ''
       reactiveDate.loginDialogVisible = false
+      reactiveDate.weixinLogVisible = false
       reactiveDate.registerDialogVisible = true
     }
     const returnLoginDialog = () => {
       reactiveDate.registerDialogVisible = false
+      reactiveDate.weixinLogVisible = false
       reactiveDate.forgetPasswordDialogVisible = false
       reactiveDate.loginDialogVisible = true
     }
@@ -256,18 +355,18 @@ export default defineComponent({
         if (data.flag) {
           proxy.$notify({
             title: 'Success',
-            message: '注册成功',
+            message: '注册成功,请点击登录进入系统',
             type: 'success'
           })
-          reactiveDate.registerDialogVisible = false
-          reactiveDate.loginDialogVisible = true
+          let register_box = document.getElementsByClassName('register-box')[0];
+          let weixinLog_box = document.getElementsByClassName('weixinLog-box')[0];
+          let login_box = document.getElementsByClassName('login-box')[0];
+          register_box.classList.add('hidden');
+          weixinLog_box.classList.add('hidden');
+          login_box.classList.remove('hidden');
         }
       })
     }
-    // const handleOpenModel: any = (status: boolean) => {
-    //   searchStore.setOpenModal(status)
-    // }
-
     const qqLogin = () => {
       userStore.currentUrl = route.path
       reactiveDate.loginDialogVisible = false
@@ -279,14 +378,15 @@ export default defineComponent({
         })
       } else {
         window.open(
-          'https://graph.qq.com/oauth2.0/show?which=Login&display=pc&client_id=' +
+            'https://graph.qq.com/oauth2.0/show?which=Login&display=pc&client_id=' +
             +config.qqLogin.QQ_APP_ID +
             '&response_type=token&scope=all&redirect_uri=' +
             config.qqLogin.QQ_REDIRECT_URI,
-          '_self'
+            '_self'
         )
       }
     }
+
     const updatePassword = () => {
       api.updatePassword(loginInfo).then(({ data }) => {
         if (data.flag) {
@@ -310,37 +410,41 @@ export default defineComponent({
         return
       }
       api
-        .accessArticle({
-          articleId: reactiveDate.articleId,
-          articlePassword: reactiveDate.articlePassword
-        })
-        .then(({ data }) => {
-          if (data.flag) {
-            reactiveDate.articlePasswordDialogVisible = false
-            userStore.accessArticles.push(reactiveDate.articleId)
-            router.push({ path: '/articles/' + reactiveDate.articleId })
-          }
-        })
+          .accessArticle({
+            articleId: reactiveDate.articleId,
+            articlePassword: reactiveDate.articlePassword
+          })
+          .then(({ data }) => {
+            if (data.flag) {
+              reactiveDate.articlePasswordDialogVisible = false
+              userStore.accessArticles.push(reactiveDate.articleId)
+              router.push({ path: '/articles/' + reactiveDate.articleId })
+            }
+          })
     }
     return {
-      //handleOpenModel,
       loginInfo,
       ...toRefs(reactiveDate),
       userInfo: toRef(userStore.$state, 'userInfo'),
       isMobile: toRef(commonStore.$state, 'isMobile'),
       login,
       qqLogin,
+      weixinLogin,
       logout,
       handleClick,
       openUserCenter,
       openLoginDialog,
       openRegisterDialog,
+      otherLogin,
       returnLoginDialog,
       sendCode,
       register,
       updatePassword,
       openForgetPasswordDialog,
       accessArticle,
+      goRegister,
+      goWeixin,
+      goLogin,
       multiLanguage: computed(() => {
         let websiteConfig: any = appStore.websiteConfig
         return websiteConfig.multiLanguage
@@ -350,33 +454,16 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss">
-.my-el-button {
-  width: 300px !important;
-}
-.el-button {
-  width: 300px;
-}
-.el-dialog__headerbtn {
-  outline: none !important;
-}
-.el-input-group__append {
-  background-color: var(--background-primary-alt) !important;
-}
-.el-form-item__label {
-  text-align: left;
-  width: 70px;
-  color: var(--text-normal) !important;
-}
-.el-input__inner {
-  color: var(--text-normal) !important;
-  background-color: var(--background-primary-alt) !important;
-}
-.el-input__wrapper {
-  background: var(--background-primary-alt) !important;
+<style lang="scss" scoped>
+:deep .login-dialog-body {
+  padding: 0;
+  height: 0;
+  width: 700px;
+  background: transparent;
 }
 </style>
-<style lang="scss" scoped>
+<style scoped>
+
 .text {
   color: var(--text-normal);
   cursor: pointer;
@@ -447,4 +534,195 @@ export default defineComponent({
 .avatar-img:hover {
   transform: rotate(360deg);
 }
+
+.userLogin-container {
+  margin: 5% auto;
+  background-color: #fff;
+  width: 650px;
+  height: 415px;
+  border-radius: 5px;
+  box-shadow: 5px 5px 5px rgba(0,0,0,.1);
+  position: relative
+}
+
+.form-box {
+  position: absolute;
+  top: -10%;
+  left: 5%;
+  background-color: #d3b7d8;
+  width: 320px;
+  height: 500px;
+  border-radius: 5px;
+  box-shadow: 2px 0 10px rgba(0,0,0,.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  transition: .5s ease-in-out
+}
+
+.login-box,.register-box,.weixinLog-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%
+}
+
+.hidden {
+  display: none;
+  transition: .5s
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  color: #fff;
+  letter-spacing: 5px
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  color: #fff;
+  letter-spacing: 1px;
+  margin-top: 28px;
+}
+
+input {
+  background-color: transparent;
+  width: 70%;
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid hsla(0,0%,100%,.4);
+  padding: 10px 0;
+  text-indent: 10px;
+  margin: 8px 0;
+  font-size: 14px;
+  letter-spacing: 2px
+}
+
+input::-moz-placeholder {
+  color: #fff
+}
+
+input::placeholder {
+  color: #fff
+}
+
+input:focus {
+  color: #a262ad;
+  outline: none;
+  border-bottom: 1px solid #a262ad80;
+  transition: .5s
+}
+
+input:focus::-moz-placeholder {
+  opacity: 0
+}
+
+input:focus::placeholder {
+  opacity: 0
+}
+
+.form-box button {
+  width: 70%;
+  margin-top: 35px;
+  background-color: #f6f6f6;
+  outline: none;
+  border-radius: 8px;
+  padding: 13px;
+  color: #a262ad;
+  letter-spacing: 2px;
+  border: none;
+  cursor: pointer
+}
+
+.form-box button:hover {
+  background-color: #a262ad;
+  color: #f6f6f6;
+  transition: background-color .5s ease
+}
+
+.con-box {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%)
+}
+
+.con-box.left {
+  left: -2%
+}
+
+.con-box.right {
+  right: -2%
+}
+
+.con-box h2 {
+  color: #8e9aaf;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-align: center;
+  margin-bottom: 4px
+}
+
+.con-box p {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #8e9aaf;
+  text-align: center
+}
+
+.con-box span {
+  color: #d3b7d8
+}
+
+.con-box img {
+  width: 150px;
+  height: 150px;
+  opacity: .9;
+  margin: 40px 0
+}
+
+.con-box button {
+  background-color: #fff;
+  color: #a262ad;
+  border: 1px solid #d3b7d8;
+  padding: 6px 10px;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  outline: none;
+  cursor: pointer
+}
+
+.con-box button:hover {
+  background-color: #d3b7d8;
+  color: #fff
+}
+
+.change-name-btn {
+  font-size: 14px;
+  padding: 0 10px !important;
+  height: 35px !important;
+  margin: 0 !important;
+  width: fit-content !important;
+  position: relative;
+  right: -33%;
+  top: -40px;
+}
+
+.login-text {
+  background: linear-gradient(90deg,#6bc5f8,#cf59e6 50%,#6bc5f8);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
+
+
 </style>

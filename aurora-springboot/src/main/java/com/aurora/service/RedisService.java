@@ -9,11 +9,12 @@ import org.springframework.data.redis.connection.RedisGeoCommands;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("all")
 public interface RedisService {
 
-    void set(String key, Object value, long time);
+    void set(String key, Object value, long time, TimeUnit unit);
 
     void set(String key, Object value);
 
